@@ -1,0 +1,3 @@
+[submodule "external/cjong4"]
+	path = external/cjong4
+	url = https://github.com/sh-lab/cjong4
