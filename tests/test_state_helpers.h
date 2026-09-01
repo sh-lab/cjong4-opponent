@@ -9,7 +9,7 @@
 #include "cjong4/manager/player_view.h"
 
 /* Test fixtures intentionally assemble states directly. These helpers use
- * cjong4 v3.1's public packing constants without exposing mutation helpers
+ * cjong4 v3.2's public packing constants without exposing mutation helpers
  * from the opponent library. */
 static inline void
 cj4_state_set_phase(cj4_mahjong *state, cj4_phase phase)
