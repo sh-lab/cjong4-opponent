@@ -27,7 +27,7 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR AND DEFINED BUILD_TESTS)
 endif()
 
 if (CJ4_OPPONENT_USE_SYSTEM_CJONG4)
-    find_package(cjong4 3.2 CONFIG REQUIRED)
+    find_package(cjong4 3.3 CONFIG REQUIRED)
 else()
     if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/cjong4/CMakeLists.txt")
         message(FATAL_ERROR
