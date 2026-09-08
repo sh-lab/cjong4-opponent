@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/sh-lab/cjong4-opponent/actions/workflows/ci.yml/badge.svg)](https://github.com/sh-lab/cjong4-opponent/actions/workflows/ci.yml)
 
-`cjong4-opponent` は、[cjong4](https://github.com/sh-lab/cjong4) 3.2.0 の manager API で使う `cj4m_player_delegate` をまとめた opponent 集です。ルート側では「どの行動を選ぶか」に集中し、麻雀の状態遷移や得点計算などの本体ロジックはサブモジュール `external/cjong4` が担います。
+`cjong4-opponent` は、[cjong4](https://github.com/sh-lab/cjong4) 4.0.0 の manager API で使う `cj4m_player_delegate` をまとめた opponent 集です。ルート側では「どの行動を選ぶか」に集中し、麻雀の状態遷移や得点計算などの本体ロジックはサブモジュール `external/cjong4` が担います。
 
 ## このリポジトリで提供するもの
 
@@ -31,13 +31,13 @@
 
 ## 前提
 
-このリポジトリは、[sh-lab/cjong4](https://github.com/sh-lab/cjong4) v3.2.0 を `external/cjong4` サブモジュールとして利用します。初回セットアップ時はサブモジュールを取得した状態で作業してください。
+このリポジトリは、[sh-lab/cjong4](https://github.com/sh-lab/cjong4) v4.0.0 を `external/cjong4` サブモジュールとして利用します。初回セットアップ時はサブモジュールを取得した状態で作業してください。
 
 ```sh
 git submodule update --init --recursive
 ```
 
-GitHubの自動生成ソースアーカイブなど、サブモジュール本体を含まない配布物からビルドする場合は、cjong4 v3.2.0を先にインストールして次のように指定できます。
+GitHubの自動生成ソースアーカイブなど、サブモジュール本体を含まない配布物からビルドする場合は、cjong4 v4.0.0を先にインストールして次のように指定できます。
 
 ```sh
 cmake -S . -B build \
@@ -141,7 +141,7 @@ CLI 例の実行方法:
 
 既存 opponent はいずれも、`cj4_player_view` と `cj4_action[]` を受け取り、その場で 1 手を返すだけの軽量な実装です。
 
-cjong4 3.2.0 の `locations` から手牌・河・副露・ドラ表示牌を復元し、公開済みの牌を打牌評価に利用します。嶺上牌ツモ後も通常のツモ後と同じ一度の action 選択で、全 opponent が和了を最優先します。
+cjong4 4.0.0 の `locations` から手牌・河・副露・ドラ表示牌を復元し、公開済みの牌を打牌評価に利用します。嶺上牌ツモ後も通常のツモ後と同じ一度の action 選択で、全 opponent が和了を最優先します。
 
 - `betaori`
   - 和了可能なら即和了
