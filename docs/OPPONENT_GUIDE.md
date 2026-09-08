@@ -166,6 +166,11 @@ cj4_opponent_attack(int ctx_level)
 
 cjong4 4.0.0 では delegate は action 選択ごとに一度だけ呼ばれます。嶺上牌ツモ後も、ツモ和了・打牌・連続槓の候補が同じ `actions` にまとめて渡されます。delegate は各回の `view` と `actions` だけから合法手を返してください。
 
+手牌のシャンテン数、形テン、待ち牌種を判断材料にする場合は、
+`cjong4/player/hand_analysis.h` の `cj4p_*` APIを使用できます。これらは
+マスク済みの `cj4_player_view` だけを入力とし、他家の非公開情報を参照しません。
+通常ツモの残数は `view->live_wall_remaining` から取得できます。
+
 ## 打牌選択を実装するときのコツ
 
 単純な先頭優先でも動きますが、既存実装は「残したい牌」を暗黙に表現する scoring を使っています。
