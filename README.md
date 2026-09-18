@@ -229,8 +229,8 @@ cj4m_player_delegate delegate = cj4_opponent_standard(1);
 
 ## ステータス / Status
 
-1.0.4開発中（standard opponent追加）<br>
-1.0.4 in development (standard opponent)
+1.0.4リリース<br>
+1.0.4 release
 
 ## ライセンス
 
