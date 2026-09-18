@@ -169,6 +169,8 @@ cjong4 4.0.0 では delegate は action 選択ごとに一度だけ呼ばれま�
 手牌のシャンテン数、形テン、待ち牌種を判断材料にする場合は、
 `cjong4/player/hand_analysis.h` の `cj4p_*` APIを使用できます。これらは
 マスク済みの `cj4_player_view` だけを入力とし、他家の非公開情報を参照しません。
+`standard` は、このAPIで打牌後のシャンテン数を比較し、公開情報だけを使って仮想ツモ後の有効牌枚数を評価する実装例です。方針の境界と対局テストは `tests/test_standard.c` にあります。
+
 通常ツモの残数は `view->live_wall_remaining` から取得できます。
 
 ## 打牌選択を実装するときのコツ

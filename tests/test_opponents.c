@@ -13,6 +13,7 @@
 #include "cjong4/opponent/opponent_kokushi.h"
 #include "cjong4/opponent/opponent_pinfu.h"
 #include "cjong4/opponent/opponent_somete.h"
+#include "cjong4/opponent/opponent_standard.h"
 #include "cjong4/opponent/opponent_tanyao.h"
 #include "cjong4/opponent/opponent_toitoi.h"
 
@@ -970,6 +971,7 @@ test_all_opponents_choose_rinshan_tsumo_before_kan_dora_reveal(void)
         cj4_opponent_kokushi,
         cj4_opponent_pinfu,
         cj4_opponent_somete,
+        cj4_opponent_standard,
         cj4_opponent_tanyao,
         cj4_opponent_toitoi};
     cj4_player_view view;

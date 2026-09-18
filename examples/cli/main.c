@@ -14,6 +14,7 @@
 #include "cjong4/opponent/opponent_toitoi.h"
 #include "cjong4/opponent/opponent_chiitoi.h"
 #include "cjong4/opponent/opponent_chanta.h"
+#include "cjong4/opponent/opponent_standard.h"
 
 #include <assert.h>
 #include <inttypes.h>
@@ -70,10 +71,10 @@ should_render_step(const cj4_mahjong *state, int show_all_steps)
 static void
 init_default_delegates(cj4m_player_delegate delegates[CJ4_PLAYER_COUNT])
 {
-    delegates[0] = cj4_opponent_chiitoi(1);
-    delegates[1] = cj4_opponent_toitoi(1);
-    delegates[2] = cj4_opponent_kokushi(1);
-    delegates[3] = cj4_opponent_pinfu(1);
+    delegates[0] = cj4_opponent_standard(1);
+    delegates[1] = cj4_opponent_standard(1);
+    delegates[2] = cj4_opponent_standard(1);
+    delegates[3] = cj4_opponent_standard(1);
 }
 #endif
 
