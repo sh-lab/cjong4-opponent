@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(cjong4-opponent VERSION 1.0.0 LANGUAGES C)
+project(cjong4-opponent VERSION 1.0.4 LANGUAGES C)
 
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
@@ -50,6 +50,7 @@ add_library(cj4_opponents STATIC
     src/opponent_chiitoi.c
     src/opponent_kokushi.c
     src/opponent_pinfu.c
+    src/opponent_standard.c
     src/opponent_somete.c
     src/opponent_tanyao.c
     src/opponent_toitoi.c
@@ -88,6 +89,9 @@ if (CJ4_OPPONENT_BUILD_TESTS)
     )
     target_link_libraries(cj4_opponent_tests PRIVATE cj4_opponents)
 
+    add_executable(cj4_standard_tests tests/test_standard.c)
+    target_link_libraries(cj4_standard_tests PRIVATE cj4_opponents)
+
     add_executable(cj4_winning_results_tests
         tests/test_winning_results.c
         examples/cli/main.c
@@ -103,13 +107,16 @@ if (CJ4_OPPONENT_BUILD_TESTS)
     # These tests use the standard assert macro as their test framework.
     # Keep assertions active in Release and other NDEBUG configurations.
     if (MSVC)
+        target_compile_options(cj4_standard_tests PRIVATE /UNDEBUG)
         target_compile_options(cj4_opponent_tests PRIVATE /UNDEBUG)
         target_compile_options(cj4_winning_results_tests PRIVATE /UNDEBUG)
     else()
+        target_compile_options(cj4_standard_tests PRIVATE -UNDEBUG)
         target_compile_options(cj4_opponent_tests PRIVATE -UNDEBUG)
         target_compile_options(cj4_winning_results_tests PRIVATE -UNDEBUG)
     endif()
 
+    add_test(NAME cj4_standard_tests COMMAND cj4_standard_tests)
     add_test(NAME cj4_opponent_tests COMMAND cj4_opponent_tests)
     add_test(NAME cj4_winning_results_tests COMMAND cj4_winning_results_tests)
 endif()
