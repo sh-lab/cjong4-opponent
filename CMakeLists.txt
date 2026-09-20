@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(cjong4-opponent VERSION 1.0.4 LANGUAGES C)
+project(cjong4-opponent VERSION 1.0.5 LANGUAGES C)
 
 include(CMakePackageConfigHelpers)
 include(GNUInstallDirs)
@@ -11,7 +11,10 @@ set(CMAKE_C_EXTENSIONS OFF)
 option(CJ4_OPPONENT_BUILD_EXAMPLES "Build example programs" OFF)
 option(CJ4_OPPONENT_BUILD_TESTS "Build tests" OFF)
 option(CJ4_OPPONENT_USE_SYSTEM_CJONG4
-    "Use an installed cjong4 package instead of the bundled submodule" OFF)
+    "Use an installed cjong4 package instead of a source tree" OFF)
+
+set(CJONG4_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../cjong4" CACHE PATH
+    "Path to a cjong4 source tree")
 
 # Preserve the pre-release option names for top-level builds only. Prefixed
 # options avoid collisions when this project is embedded with add_subdirectory.
@@ -26,22 +29,21 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR AND DEFINED BUILD_TESTS)
     set(CJ4_OPPONENT_BUILD_TESTS "${BUILD_TESTS}")
 endif()
 
-if (CJ4_OPPONENT_USE_SYSTEM_CJONG4)
-    find_package(cjong4 4.0.0 CONFIG REQUIRED)
-else()
-    if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/external/cjong4/CMakeLists.txt")
-        message(FATAL_ERROR
-            "The cjong4 submodule is missing. Run 'git submodule update --init "
-            "--recursive' or configure with CJ4_OPPONENT_USE_SYSTEM_CJONG4=ON.")
+if (NOT TARGET cjong4::cj4)
+    if (CJ4_OPPONENT_USE_SYSTEM_CJONG4)
+        find_package(cjong4 4.0.0 CONFIG REQUIRED)
+    elseif (EXISTS "${CJONG4_SOURCE_DIR}/CMakeLists.txt")
+        set(_CJ4_OPPONENT_SAVED_BUILD_TESTS "${BUILD_TESTS}")
+        set(BUILD_TESTS OFF)
+        add_subdirectory("${CJONG4_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/cjong4")
+        set(BUILD_TESTS "${_CJ4_OPPONENT_SAVED_BUILD_TESTS}")
+        unset(_CJ4_OPPONENT_SAVED_BUILD_TESTS)
+        install(FILES "${CJONG4_SOURCE_DIR}/LICENSE"
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/cjong4-opponent
+            RENAME LICENSE-cjong4)
+    else()
+        find_package(cjong4 4.0.0 CONFIG REQUIRED)
     endif()
-
-    # cjong4 has its own BUILD_TESTS option. Keep its tests out of this
-    # project's build so CJ4_OPPONENT_BUILD_TESTS controls only this repo.
-    set(_CJ4_OPPONENT_SAVED_BUILD_TESTS "${BUILD_TESTS}")
-    set(BUILD_TESTS OFF)
-    add_subdirectory(external/cjong4)
-    set(BUILD_TESTS "${_CJ4_OPPONENT_SAVED_BUILD_TESTS}")
-    unset(_CJ4_OPPONENT_SAVED_BUILD_TESTS)
 endif()
 
 add_library(cj4_opponents STATIC
@@ -132,12 +134,6 @@ install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
     DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/cjong4-opponent
 )
-if (NOT CJ4_OPPONENT_USE_SYSTEM_CJONG4)
-    install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/external/cjong4/LICENSE
-        DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/cjong4-opponent
-        RENAME LICENSE-cjong4
-    )
-endif()
 
 set(CJ4_OPPONENT_CMAKE_INSTALL_DIR
     "${CMAKE_INSTALL_LIBDIR}/cmake/cjong4-opponent")

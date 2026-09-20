@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/sh-lab/cjong4-opponent/actions/workflows/ci.yml/badge.svg)](https://github.com/sh-lab/cjong4-opponent/actions/workflows/ci.yml)
 
-`cjong4-opponent` は、[cjong4](https://github.com/sh-lab/cjong4) 4.0.0 の manager API で使う `cj4m_player_delegate` をまとめた opponent 集です。ルート側では「どの行動を選ぶか」に集中し、麻雀の状態遷移や得点計算などの本体ロジックはサブモジュール `external/cjong4` が担います。
+`cjong4-opponent` は、[cjong4](https://github.com/sh-lab/cjong4) 4.0.0 の manager API で使う `cj4m_player_delegate` をまとめた opponent 集です。ルート側では「どの行動を選ぶか」に集中し、麻雀の状態遷移や得点計算などの本体ロジックは独立した `cjong4` ライブラリ が担います。
 
 ## このリポジトリで提供するもの
 
@@ -28,15 +28,13 @@
 | `src/` | opponent 実装と共通補助 (`opponent_internal.h`) |
 | `examples/cli/` | opponent を 4 人に割り当てて対局を進める CLI 例 |
 | `tests/` | opponent の選択ロジックと勝利結果表示補助のテスト |
-| `external/cjong4/` | ゲーム本体ライブラリのサブモジュール。読み取り専用前提 |
 
 ## 前提
 
-このリポジトリは、[sh-lab/cjong4](https://github.com/sh-lab/cjong4) v4.0.0 を `external/cjong4` サブモジュールとして利用します。初回セットアップ時はサブモジュールを取得した状態で作業してください。
-
-```sh
-git submodule update --init --recursive
-```
+[cjong4-workspace](https://github.com/sh-lab/cjong4-workspace) 内では、横並びの `../cjong4` を使用します。内部サブモジュールはありません。
+単体でcloneする場合も、隣に cjong4 v4.0.0以降の互換ソースを配置してください。
+別の場所にあるソースは `-DCJONG4_SOURCE_DIR=/path/to/cjong4` で指定できます。
+親のCMakeが `cjong4::cj4` を定義済みなら、そのターゲットを利用します。
 
 GitHubの自動生成ソースアーカイブなど、サブモジュール本体を含まない配布物からビルドする場合は、cjong4 v4.0.0を先にインストールして次のように指定できます。
 
@@ -97,7 +95,7 @@ cmake -S . -B build -DCMAKE_PREFIX_PATH=/path/to/prefix
 
 ## 使い方
 
-公開 API はすべて `cj4m_player_delegate` を返します。`external/cjong4` の manager 層に渡して利用します。
+公開 API はすべて `cj4m_player_delegate` を返します。`cjong4` の manager 層に渡して利用します。
 
 ```c
 #include "cjong4/manager/manager.h"
@@ -229,8 +227,8 @@ cj4m_player_delegate delegate = cj4_opponent_standard(1);
 
 ## ステータス / Status
 
-1.0.4リリース<br>
-1.0.4 release
+1.0.5リリース<br>
+1.0.5 release
 
 ## ライセンス
 

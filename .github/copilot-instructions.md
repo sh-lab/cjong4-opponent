@@ -10,9 +10,9 @@
 
 ## Repository scope
 
-- This repository provides eight opponent delegates on top of the read-only `external/cjong4` submodule.
+- This repository provides eight opponent delegates on top of the separate `cjong4` library.
 - Opponent implementation, public headers, examples, tests, packaging, and documentation live at the repository root.
-- Game-engine changes belong in the separate cjong4 repository, never in this repository's submodule checkout.
+- Game-engine changes belong in the separate cjong4 repository, which is checked out alongside this project.
 
 ## Build and test commands
 
@@ -33,10 +33,10 @@
 
 ## High-level architecture
 
-- `external/cjong4` is split into two layers:
+- `../cjong4` is split into two layers:
   - `include/cjong4/core/` + `src/core/`: the pure game engine. These functions evaluate legality (`cj4_can_*`), apply transitions (`cj4_do_*`), score hands, settle rounds, and advance overall game state.
   - `include/cjong4/manager/` + `src/manager/`: the orchestration layer. It turns full state into a player-specific view, collects legal actions, asks delegates to choose, and resolves call priority across players.
-- `cj4_mahjong` in `external/cjong4/include/cjong4/core/state.h` is the central state value. In cjong4 v2 it stores canonical tile placement in `locations[]` and exposes packed state through `cj4_state_*` accessors.
+- `cj4_mahjong` in `../cjong4/include/cjong4/core/state.h` is the central state value. In cjong4 v2 it stores canonical tile placement in `locations[]` and exposes packed state through `cj4_state_*` accessors.
 - The engine is intentionally value-oriented: state transition functions take a full `cj4_mahjong` and return a new one rather than mutating hidden global state.
 - Tile identity is position-based, not count-based. Code works with `cj4_tile_id` and the `locations[]` array, so do not reduce logic to suit-count histograms unless the surrounding code already does that.
 - The manager flow in `src/manager/manager_flow.c` has three distinct responsibilities:
@@ -46,14 +46,11 @@
 - Hidden information is enforced through `cj4m_make_player_view()`: delegates see their own hand plus public state, but not other players' concealed tiles or unrevealed wall state.
 - The outer game loop is external to the library. Callers step a round with `cj4m_step()`, then supply the next wall themselves through `cj4_do_next_round()` when `cj4_can_next_round()` becomes true.
 
-## Submodule protection
+## Dependency ownership
 
-- The directory external/cjong4 is a git submodule
-- NEVER modify any files under external/cjong4
-- NEVER create, edit, or delete files in external/cjong4
-- Treat external/cjong4 as read-only
-
-If any change is required, instruct the user instead of modifying it
+- This repository has no internal Git submodules.
+- The workspace manages the sibling `../cjong4` repository and its revision.
+- Keep opponent changes in this repository; changes to the engine belong in the separate cjong4 repository.
 
 ## Key conventions
 
@@ -70,4 +67,4 @@ If any change is required, instruct the user instead of modifying it
 - Action selection is strict: `cj4m_step()` asserts that a delegate returns one of the offered `cj4_action` values. If you change action generation, keep the selected/offered action structures exactly consistent.
 - Tests are plain C executables using `assert`, not a third-party framework. New tests usually follow the existing pattern: build a `cj4_player_view` or small `cj4_mahjong` fixture and assert the selected action or rendered result.
 - Root tests are split between `tests/test_opponents.c` and `tests/test_winning_results.c`.
-- The checked-in submodule already has its own `.github/copilot-instructions.md`; keep this root file aligned with it, but prefer the root file for repository-level guidance such as submodule location and root-level build commands.
+- The separate cjong4 repository has its own development instructions. Use this file for opponent-specific guidance and build commands.

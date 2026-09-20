@@ -28,12 +28,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+
+      - name: Check out cjong4
+        uses: actions/checkout@v4
         with:
-          submodules: recursive
+          repository: sh-lab/cjong4
+          ref: a158c9f96ff85adb975a479a124a8f967d86f29a
+          path: deps/cjong4
 
       - name: Configure
         run: >
           cmake -S . -B build
+          -DCJONG4_SOURCE_DIR="${{ github.workspace }}/deps/cjong4"
           -DCMAKE_BUILD_TYPE=Release
           -DCMAKE_C_COMPILER=gcc
           -DCMAKE_C_EXTENSIONS=OFF
@@ -88,12 +94,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+
+      - name: Check out cjong4
+        uses: actions/checkout@v4
         with:
-          submodules: recursive
+          repository: sh-lab/cjong4
+          ref: a158c9f96ff85adb975a479a124a8f967d86f29a
+          path: deps/cjong4
 
       - name: Configure
         run: >
           cmake -S . -B build
+          -DCJONG4_SOURCE_DIR="${{ github.workspace }}/deps/cjong4"
           -DCMAKE_BUILD_TYPE=Debug
           -DCMAKE_C_COMPILER=clang
           -DCMAKE_C_EXTENSIONS=OFF
@@ -116,12 +128,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+
+      - name: Check out cjong4
+        uses: actions/checkout@v4
         with:
-          submodules: recursive
+          repository: sh-lab/cjong4
+          ref: a158c9f96ff85adb975a479a124a8f967d86f29a
+          path: deps/cjong4
 
       - name: Configure
         run: >
           cmake -S . -B build
+          -DCJONG4_SOURCE_DIR="${{ github.workspace }}/deps/cjong4"
           -G "Visual Studio 17 2022"
           -A x64
           -DCMAKE_C_EXTENSIONS=OFF

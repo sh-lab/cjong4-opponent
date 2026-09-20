@@ -1,12 +1,12 @@
 # Opponent 実装ガイド
 
-このドキュメントは、`cjong4-opponent` に新しい opponent を追加する開発者向けの実装ガイドです。ここでいう opponent は、`external/cjong4` の manager 層から渡される `cj4_player_view` と `cj4_action[]` を見て、1 つの行動を返す `cj4m_player_delegate` 実装を指します。
+このドキュメントは、`cjong4-opponent` に新しい opponent を追加する開発者向けの実装ガイドです。ここでいう opponent は、`cjong4` の manager 層から渡される `cj4_player_view` と `cj4_action[]` を見て、1 つの行動を返す `cj4m_player_delegate` 実装を指します。
 
 ## 先に押さえる前提
 
-- ゲーム本体の状態遷移や合法手生成は `external/cjong4` が担当する
+- ゲーム本体の状態遷移や合法手生成は `cjong4` が担当する
 - このリポジトリ側の責務は「提示された合法手から何を選ぶか」のみ
-- `external/cjong4` はサブモジュールなので変更対象にしない
+- `cjong4` は独立したリポジトリとして管理し、このガイドでは変更対象にしない
 - opponent は部分情報しか見えない。判断材料は `cj4_player_view` に含まれる情報に限定する
 - `cj4m_step()` は、delegate が提示されていない行動を返すと失敗する前提で使う
 
@@ -248,7 +248,7 @@ cj4m_player_delegate delegates[CJ4_PLAYER_COUNT] = {
 - `ctx` を使わない場合だけ `(void)ctx;` を入れる
 - 牌 ID そのものではなく、必要に応じて `cj4_tile_get_type()` で牌種評価する
 - 鳴き判断を入れるときは、`DISCARD` phase と `DRAW` phase を混同しない
-- `external/cjong4` 側の API や構造体を変えない
+- `cjong4` 側の API や構造体を変えない
 
 ## 追加後の確認項目
 
@@ -257,4 +257,4 @@ cj4m_player_delegate delegates[CJ4_PLAYER_COUNT] = {
 3. `tests/test_opponents.c` に opponent の性格を表すテストが入っている
 4. README など利用者向け文書に、必要なら新 opponent の説明を反映している
 
-このガイドの範囲は opponent 層です。ゲームルールや manager の内部進行そのものを変えたい場合は、`external/cjong4` 側のドキュメントと実装を参照してください。
+このガイドの範囲は opponent 層です。ゲームルールや manager の内部進行そのものを変えたい場合は、`cjong4` 側のドキュメントと実装を参照してください。
